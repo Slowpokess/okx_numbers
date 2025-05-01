@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор маркетмейкинга P2P OKX</title>
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #002855;
+            --accent-color: #00b067;
+            --background-color: #f4f7fc;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .inputs-card {
+            flex: 1;
+        }
+
+        .results-card {
+            flex: 1;
+        }
+
+        .market-card {
+            width: 100%;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .result-group {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .result-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--secondary-color);
+        }
+
+        .result-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .small-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .market-rates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .rate-card {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .rate-header {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        .suggested-prices {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #eaf4ff;
+            border-radius: 5px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .update-time {
+            font-size: 14px;
+            color: #666;
+            text-align: right;
+            margin-top: 10px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 102, 204, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .scenario-container {
+            margin-top: 20px;
+        }
+        
+        .scenarios {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .scenario {
+            background-color: #f0f0f0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .scenario:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .scenario.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .error-message {
+            color: #e53935;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border-left: 4px solid #e53935;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Калькулятор маркетмейкинга P2P OKX</h1>
+            <p>Рассчитайте прибыль от P2P маркетмейкинга на бирже OKX для пары UAH/USDT</p>
+            <div id="auto-update-control" class="auto-update-control">
+                <label for="auto-update-toggle">
+                    <input type="checkbox" id="auto-update-toggle">
+                    Автоматическое обновление каждые <select id="update-interval">
+                        <option value="30">30 секунд</option>
+                        <option value="60" selected>1 минуту</option>
+                        <option value="300">5 минут</option>
+                        <option value="600">10 минут</option>
+                    </select>
+                </label>
+            </div>
+            <div id="next-update-timer" class="next-update-timer hidden">
+                Следующее обновление через: <span id="time-left">60</span> сек.
+            </div>
+        </div>
+        
+        <div class="card inputs-card">
+            <h2>Параметры расчета</h2>
+            <div class="input-group">
+                <label for="capital">Капитал (USDT)</label>
+                <input type="number" id="capital" step="100" min="0" value="1000">
+            </div>
+            <div class="input-group">
+                <label for="spread">Спред (%)</label>
+                <input type="number" id="spread" step="0.01" min="0" value="1.0">
+            </div>
+            <div class="input-group">
+                <label for="rate">Средний курс (UAH/USDT)</label>
+                <input type="number" id="rate" step="0.01" min="0" value="38.5">
+            </div>
+            <div class="input-group">
+                <label for="utilization">Загрузка капитала (%)</label>
+                <input type="number" id="utilization" step="1" min="0" max="100" value="80">
+            </div>
+            <div class="input-group">
+                <label for="turnover">Количество оборотов в день</label>
+                <input type="number" id="turnover" step="0.1" min="0" value="3">
+            </div>
+            
+            <button id="calculate">Рассчитать прибыль</button>
+            
+            <div class="scenario-container">
+                <div class="result-label">Предустановленные сценарии:</div>
+                <div class="scenarios">
+                    <div class="scenario" data-capital="1000" data-spread="0.5" data-utilization="70" data-turnover="2">Малый капитал</div>
+                    <div class="scenario" data-capital="5000" data-spread="1" data-utilization="80" data-turnover="3">Средний капитал</div>
+                    <div class="scenario" data-capital="10000" data-spread="1.5" data-utilization="90" data-turnover="4">Крупный капитал</div>
+                </div>
+            </div>
+            
+            <div id="error-message" class="error-message">
+                Ошибка при получении данных. Убедитесь, что прокси-сервер запущен.
+            </div>
+        </div>
+        
+        <div class="card results-card">
+            <h2>Результаты расчета</h2>
+            <div class="result-group">
+                <div class="result-label">Дневная прибыль:</div>
+                <div class="result-value" id="daily-profit">0 USDT</div>
+                <div class="small-text" id="daily-profit-uah">0 UAH</div>
+            </div>
+            <div class="result-group">
+                <div class="result-label">Месячная прибыль (30 дней):</div>
+                <div class="result-value" id="monthly-profit">0 USDT</div>
+                <div class="small-text" id="monthly-profit-uah">0 UAH</div>
+            </div>
+            <div class="result-group">
+                <div class="result-label">Годовая прибыль:</div>
+                <div class="result-value" id="yearly-profit">0 USDT</div>
+                <div class="small-text" id="yearly-profit-uah">0 UAH</div>
+            </div>
+            <div class="result-group">
+                <div class="result-label">Годовая доходность:</div>
+                <div class="result-value" id="yearly-percentage">0%</div>
+            </div>
+            <div class="result-group">
+                <div class="result-label">Рабочий капитал:</div>
+                <div class="result-value" id="working-capital">0 USDT</div>
+            </div>
+            <div class="result-group">
+                <div class="result-label">Фактический спред:</div>
+                <div class="result-value" id="actual-spread">0 UAH</div>
+                <div class="small-text" id="spread-percentage">0%</div>
+            </div>
+            <div class="suggested-prices hidden" id="suggested-prices-container">
+                <div class="result-label">Рекомендуемые цены:</div>
+                <div class="result-value" id="buy-price">Покупка: 0 UAH</div>
+                <div class="result-value" id="sell-price">Продажа: 0 UAH</div>
+            </div>
+        </div>
+        
+        <div class="card market-card">
+            <h2>Рыночные данные OKX P2P <span id="loading-spinner" class="loading"></span></h2>
+            <button id="update-rates">Обновить курсы</button>
+            
+            <div class="recommendation-box" id="recommendation-box">
+                <div class="rec-title">Рекомендации для маркетмейкинга:</div>
+                <div class="rec-details">
+                    <div class="rec-item">
+                        <div class="rec-label">Покупать по:</div>
+                        <div class="rec-value rec-buy" id="rec-buy-price">0 UAH</div>
+                        <div class="rec-info" id="rec-buy-info">Лучшая цена покупки минус наценка</div>
+                    </div>
+                    <div class="rec-item">
+                        <div class="rec-label">Продавать по:</div>
+                        <div class="rec-value rec-sell" id="rec-sell-price">0 UAH</div>
+                        <div class="rec-info" id="rec-sell-info">Лучшая цена продажи плюс наценка</div>
+                    </div>
+                    <div class="rec-item">
+                        <div class="rec-label">Ожидаемый спред:</div>
+                        <div class="rec-value" id="rec-spread">0%</div>
+                        <div class="rec-info" id="rec-profit">Потенциальная прибыль: 0 USDT</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="market-rates">
+                <div class="rate-card">
+                    <div class="rate-header">Предложения на покупку USDT (продажа UAH)</div>
+                    <table id="buy-orders">
+                        <thead>
+                            <tr>
+                                <th>Цена (UAH)</th>
+                                <th>Доступно (USDT)</th>
+                                <th>Платежные методы</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">Загрузка данных...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="rate-card">
+                    <div class="rate-header">Предложения на продажу USDT (покупка UAH)</div>
+                    <table id="sell-orders">
+                        <thead>
+                            <tr>
+                                <th>Цена (UAH)</th>
+                                <th>Доступно (USDT)</th>
+                                <th>Платежные методы</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">Загрузка данных...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="update-time" id="update-time">
+                Последнее обновление: никогда
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Глобальные переменные для хранения курсов
+        let marketData = {
+            buyOrders: [],
+            sellOrders: [],
+            lastUpdate: null,
+            bestBuyPrice: 0,
+            bestSellPrice: 0
+        };
+        
+        // Переменные для автоматического обновления
+        let autoUpdateTimer = null;
+        let timeLeftCounter = 0;
+        
+        // Настройки рекомендаций
+        const recommendationSettings = {
+            buyMargin: 0.05,  // 0.05 UAH отступ от лучшей цены покупки
+            sellMargin: 0.05,  // 0.05 UAH отступ от лучшей цены продажи
+            minSpread: 0.5    // Минимальный рекомендуемый спред в %
+        };
+        
+        // Функция для форматирования чисел
+        function formatNumber(num, decimals = 2) {
+            return parseFloat(num).toFixed(decimals);
+        }
+        
+        // Функция для рассчета прибыли
+        function calculateProfit() {
+            // Получаем значения из полей ввода
+            const capital = parseFloat(document.getElementById('capital').value);
+            const spreadPercent = parseFloat(document.getElementById('spread').value);
+            const rate = parseFloat(document.getElementById('rate').value);
+            const utilization = parseFloat(document.getElementById('utilization').value) / 100;
+            const turnover = parseFloat(document.getElementById('turnover').value);
+            
+            // Рассчитываем рабочий капитал
+            const workingCapital = capital * utilization;
+            
+            // Рассчитываем фактический спред в валюте
+            const spreadAmount = rate * (spreadPercent / 100);
+            
+            // Рассчитываем дневную прибыль
+            const dailyProfit = workingCapital * (spreadPercent / 100) * turnover;
+            
+            // Рассчитываем месячную прибыль (30 дней)
+            const monthlyProfit = dailyProfit * 30;
+            
+            // Рассчитываем годовую прибыль
+            const yearlyProfit = dailyProfit * 365;
+            
+            // Рассчитываем годовую доходность
+            const yearlyPercentage = (yearlyProfit / capital) * 100;
+            
+            // Рассчитываем рекомендуемые цены покупки и продажи
+            const buyPrice = rate - (spreadAmount / 2);
+            const sellPrice = rate + (spreadAmount / 2);
+            
+            // Обновляем значения на странице
+            document.getElementById('daily-profit').textContent = formatNumber(dailyProfit) + ' USDT';
+            document.getElementById('daily-profit-uah').textContent = formatNumber(dailyProfit * rate) + ' UAH';
+            
+            document.getElementById('monthly-profit').textContent = formatNumber(monthlyProfit) + ' USDT';
+            document.getElementById('monthly-profit-uah').textContent = formatNumber(monthlyProfit * rate) + ' UAH';
+            
+            document.getElementById('yearly-profit').textContent = formatNumber(yearlyProfit) + ' USDT';
+            document.getElementById('yearly-profit-uah').textContent = formatNumber(yearlyProfit * rate) + ' UAH';
+            
+            document.getElementById('yearly-percentage').textContent = formatNumber(yearlyPercentage) + '%';
+            document.getElementById('working-capital').textContent = formatNumber(workingCapital) + ' USDT';
+            document.getElementById('actual-spread').textContent = formatNumber(spreadAmount) + ' UAH';
+            document.getElementById('spread-percentage').textContent = 'Спред: ' + formatNumber(spreadPercent) + '%';
+            
+            // Показываем рекомендуемые цены
+            document.getElementById('suggested-prices-container').classList.remove('hidden');
+            document.getElementById('buy-price').textContent = 'Покупка: ' + formatNumber(buyPrice) + ' UAH';
+            document.getElementById('sell-price').textContent = 'Продажа: ' + formatNumber(sellPrice) + ' UAH';
+            
+            return {
+                dailyProfit,
+                monthlyProfit,
+                yearlyProfit,
+                yearlyPercentage,
+                workingCapital,
+                spreadAmount,
+                buyPrice,
+                sellPrice
+            };
+        }
+        
+        // Функция для генерации рекомендаций на основе данных рынка
+        function generateRecommendations() {
+            if (marketData.bestBuyPrice <= 0 || marketData.bestSellPrice <= 0) {
+                return;
+            }
+            
+            // Вычисляем рекомендуемые цены с учетом отступов
+            const recommendedBuyPrice = marketData.bestSellPrice - recommendationSettings.buyMargin;
+            const recommendedSellPrice = marketData.bestBuyPrice + recommendationSettings.sellMargin;
+            
+            // Вычисляем спред и прибыль
+            const recommendedSpread = ((recommendedSellPrice - recommendedBuyPrice) / recommendedBuyPrice) * 100;
+            const capital = parseFloat(document.getElementById('capital').value);
+            const utilization = parseFloat(document.getElementById('utilization').value) / 100;
+            const turnover = parseFloat(document.getElementById('turnover').value);
+            const workingCapital = capital * utilization;
+            const dailyProfit = workingCapital * (recommendedSpread / 100) * turnover;
+            
+            // Проверяем, удовлетворяет ли рекомендуемый спред минимальному порогу
+            let buyPriceInfo = 'Лучшая цена покупки минус ' + recommendationSettings.buyMargin + ' UAH';
+            let sellPriceInfo = 'Лучшая цена продажи плюс ' + recommendationSettings.sellMargin + ' UAH';
+            
+            if (recommendedSpread < recommendationSettings.minSpread) {
+                // Если спред слишком мал, корректируем рекомендации
+                const averagePrice = (recommendedBuyPrice + recommendedSellPrice) / 2;
+                const minSpreadAmount = averagePrice * (recommendationSettings.minSpread / 100);
+                const adjustedBuyPrice = averagePrice - (minSpreadAmount / 2);
+                const adjustedSellPrice = averagePrice + (minSpreadAmount / 2);
+                
+                buyPriceInfo += ' (скорректировано для минимального спреда)';
+                sellPriceInfo += ' (скорректировано для минимального спреда)';
+                
+                // Обновляем значения на странице
+                document.getElementById('rec-buy-price').textContent = formatNumber(adjustedBuyPrice) + ' UAH';
+                document.getElementById('rec-sell-price').textContent = formatNumber(adjustedSellPrice) + ' UAH';
+                
+                // Рассчитываем фактический спред после корректировки
+                const actualSpread = ((adjustedSellPrice - adjustedBuyPrice) / adjustedBuyPrice) * 100;
+                document.getElementById('rec-spread').textContent = formatNumber(actualSpread) + '%';
+                
+                // Рассчитываем прибыль с скорректированным спредом
+                const adjustedDailyProfit = workingCapital * (actualSpread / 100) * turnover;
+                document.getElementById('rec-profit').textContent = 'Потенциальная прибыль: ' + formatNumber(adjustedDailyProfit) + ' USDT/день';
+            } else {
+                // Обновляем значения на странице с рассчитанными рекомендациями
+                document.getElementById('rec-buy-price').textContent = formatNumber(recommendedBuyPrice) + ' UAH';
+                document.getElementById('rec-sell-price').textContent = formatNumber(recommendedSellPrice) + ' UAH';
+                document.getElementById('rec-spread').textContent = formatNumber(recommendedSpread) + '%';
+                document.getElementById('rec-profit').textContent = 'Потенциальная прибыль: ' + formatNumber(dailyProfit) + ' USDT/день';
+            }
+            
+            document.getElementById('rec-buy-info').textContent = buyPriceInfo;
+            document.getElementById('rec-sell-info').textContent = sellPriceInfo;
+            
+            // Обновляем поля в калькуляторе для более точных расчетов
+            const averageRate = (recommendedBuyPrice + recommendedSellPrice) / 2;
+            document.getElementById('rate').value = formatNumber(averageRate);
+            
+            // Обновляем поле спреда, используя скорректированный спред, если он был изменен
+            if (recommendedSpread < recommendationSettings.minSpread) {
+                const adjustedBuyPrice = document.getElementById('rec-buy-price').textContent.split(' ')[0];
+                const adjustedSellPrice = document.getElementById('rec-sell-price').textContent.split(' ')[0];
+                const actualSpread = ((parseFloat(adjustedSellPrice) - parseFloat(adjustedBuyPrice)) / parseFloat(adjustedBuyPrice)) * 100;
+                document.getElementById('spread').value = formatNumber(actualSpread);
+            } else {
+                document.getElementById('spread').value = formatNumber(recommendedSpread);
+            }
+            
+            // Пересчитываем общую прибыль
+            calculateProfit();
+        }
+        
+        // Функция для получения данных с API OKX через прокси-сервер
+        async function fetchOKXData() {
+            try {
+                document.getElementById('loading-spinner').classList.remove('hidden');
+                document.getElementById('error-message').style.display = 'none';
+                
+                // Используем локальный прокси-сервер для обхода CORS
+                const proxyUrl = 'http://localhost:3000';
+                
+                // Получаем данные по предложениям на покупку USDT (продажа гривны)
+                const buyOrdersResponse = await fetch(`${proxyUrl}/api/okx/buy-orders`);
+                
+                if (!buyOrdersResponse.ok) {
+                    throw new Error(`Ошибка HTTP: ${buyOrdersResponse.status}`);
+                }
+                
+                const buyOrdersData = await buyOrdersResponse.json();
+                
+                // Выводим в консоль структуру данных для отладки
+                console.log('Структура данных от OKX (покупка):', JSON.stringify(buyOrdersData).substring(0, 1000));
+                
+                // Получаем данные по предложениям на продажу USDT (покупка гривны)
+                const sellOrdersResponse = await fetch(`${proxyUrl}/api/okx/sell-orders`);
+                
+                if (!sellOrdersResponse.ok) {
+                    throw new Error(`Ошибка HTTP: ${sellOrdersResponse.status}`);
+                }
+                
+                const sellOrdersData = await sellOrdersResponse.json();
+                
+                // Выводим в консоль структуру данных для отладки
+                console.log('Структура данных от OKX (продажа):', JSON.stringify(sellOrdersData).substring(0, 1000));
+                
+                // Проверяем структуру данных и обрабатываем их
+                // Обработка для структуры API OKX, которую мы получили
+                let processedBuyOrders = [];
+                let processedSellOrders = [];
+                
+                // Обрабатываем ордера на продажу (в OKX API они в поле "sell")
+                // Проверка данных для покупки USDT (продажа UAH)
+                if (buyOrdersData && buyOrdersData.data && buyOrdersData.data.sell && Array.isArray(buyOrdersData.data.sell)) {
+                    processedBuyOrders = buyOrdersData.data.sell
+                        .slice(0, 5) // Берем только первые 5 ордеров
+                        .map(order => {
+                            // Обработка платежных методов
+                            let paymentMethodsText = 'Не указано';
+                            if (order.paymentMethods && Array.isArray(order.paymentMethods)) {
+                                paymentMethodsText = order.paymentMethods.join(', ');
+                            }
+                            
+                            return {
+                                price: parseFloat(order.price) || 0,
+                                available: parseFloat(order.availableAmount) || 0,
+                                paymentMethods: paymentMethodsText
+                            };
+                        });
+                }
+                
+                // Обрабатываем ордера на покупку (в OKX API они в поле "buy")
+                // Проверка данных для продажи USDT (покупка UAH)
+                if (sellOrdersData && sellOrdersData.data && sellOrdersData.data.buy && Array.isArray(sellOrdersData.data.buy)) {
+                    processedSellOrders = sellOrdersData.data.buy
+                        .slice(0, 5) // Берем только первые 5 ордеров
+                        .map(order => {
+                            // Обработка платежных методов
+                            let paymentMethodsText = 'Не указано';
+                            if (order.paymentMethods && Array.isArray(order.paymentMethods)) {
+                                paymentMethodsText = order.paymentMethods.join(', ');
+                            }
+                            
+                            return {
+                                price: parseFloat(order.price) || 0,
+                                available: parseFloat(order.availableAmount) || 0,
+                                paymentMethods: paymentMethodsText
+                            };
+                        });
+                }
+                
+                // Аналогичная обработка для ордеров на продажу больше не нужна,
+                // так как мы уже обработали оба типа данных выше
+                
+                // Проверяем, что у нас есть данные для обработки
+                if (processedBuyOrders.length === 0 && processedSellOrders.length === 0) {
+                    console.log('Не удалось получить данные в ожидаемом формате. Структура данных:', 
+                                { buyOrders: buyOrdersData, sellOrders: sellOrdersData });
+                    throw new Error('Не удалось получить данные в ожидаемом формате');
+                }
+                
+                // Обновляем глобальные переменные
+                marketData.buyOrders = processedBuyOrders;
+                marketData.sellOrders = processedSellOrders;
+                marketData.lastUpdate = new Date();
+                
+                // Находим лучшие цены (самая низкая цена продажи и самая высокая цена покупки)
+                if (processedBuyOrders.length > 0) {
+                    // Для продажи USDT берем минимальную цену (чтобы предложить лучшую)
+                    marketData.bestBuyPrice = Math.min(...processedBuyOrders.map(order => order.price));
+                }
+                
+                if (processedSellOrders.length > 0) {
+                    // Для покупки USDT берем максимальную цену (чтобы предложить лучшую)
+                    marketData.bestSellPrice = Math.max(...processedSellOrders.map(order => order.price));
+                }
+                
+                // Обновляем таблицы
+                updateTables();
+                
+                // Генерируем рекомендации на основе полученных данных
+                generateRecommendations();
+                
+                // Показываем время обновления
+                const timeString = new Date().toLocaleTimeString();
+                document.getElementById('update-time').textContent = 'Последнее обновление: ' + timeString;
+                
+                document.getElementById('loading-spinner').classList.add('hidden');
+                
+                // Если автообновление включено, устанавливаем таймер для следующего обновления
+                if (document.getElementById('auto-update-toggle').checked) {
+                    startAutoUpdateTimer();
+                }
+            } catch (error) {
+                console.error('Ошибка при получении данных: ', error);
+                document.getElementById('error-message').textContent = 'Ошибка при получении данных: ' + error.message;
+                document.getElementById('error-message').style.display = 'block';
+                document.getElementById('update-time').textContent = 'Ошибка при обновлении данных';
+                document.getElementById('loading-spinner').classList.add('hidden');
+                
+                // Возвращаемся к использованию симулированных данных в случае ошибки
+                useSimulatedData();
+            }
+        }
+        
+        // Функция для запуска таймера автообновления
+        function startAutoUpdateTimer() {
+            // Очищаем предыдущий таймер, если он был
+            if (autoUpdateTimer) {
+                clearInterval(autoUpdateTimer);
+            }
+            
+            // Получаем интервал обновления из select
+            const updateIntervalSeconds = parseInt(document.getElementById('update-interval').value);
+            timeLeftCounter = updateIntervalSeconds;
+            
+            // Показываем таймер
+            const timerElement = document.getElementById('next-update-timer');
+            timerElement.classList.remove('hidden');
+            document.getElementById('time-left').textContent = timeLeftCounter;
+            
+            // Устанавливаем интервал для обновления счетчика
+            autoUpdateTimer = setInterval(function() {
+                timeLeftCounter--;
+                document.getElementById('time-left').textContent = timeLeftCounter;
+                
+                // Когда достигаем нуля, обновляем данные
+                if (timeLeftCounter <= 0) {
+                    fetchOKXData();
+                    timeLeftCounter = updateIntervalSeconds;
+                }
+            }, 1000);
+        }
+        
+        // Функция для остановки таймера автообновления
+        function stopAutoUpdateTimer() {
+            if (autoUpdateTimer) {
+                clearInterval(autoUpdateTimer);
+                autoUpdateTimer = null;
+            }
+            
+            document.getElementById('next-update-timer').classList.add('hidden');
+        }
+        
+        // Функция для использования симулированных данных при ошибке
+        function useSimulatedData() {
+            // Симулированные данные для демонстрации работы калькулятора
+            const simulatedBuyOrders = [
+                { price: 38.50, available: 1000, paymentMethods: 'Монобанк, Приват24' },
+                { price: 38.45, available: 800, paymentMethods: 'Монобанк, Приват24' },
+                { price: 38.40, available: 1200, paymentMethods: 'PUMB, Приват24' },
+                { price: 38.35, available: 500, paymentMethods: 'Монобанк' },
+                { price: 38.30, available: 750, paymentMethods: 'Приват24, PUMB' }
+            ];
+            
+            const simulatedSellOrders = [
+                { price: 39.00, available: 1200, paymentMethods: 'Монобанк, Приват24' },
+                { price: 39.05, available: 900, paymentMethods: 'Приват24' },
+                { price: 39.10, available: 1100, paymentMethods: 'Монобанк, PUMB' },
+                { price: 39.15, available: 650, paymentMethods: 'PUMB' },
+                { price: 39.20, available: 800, paymentMethods: 'Монобанк, Приват24' }
+            ];
+            
+            // Обновляем глобальные переменные
+            marketData.buyOrders = simulatedBuyOrders;
+            marketData.sellOrders = simulatedSellOrders;
+            marketData.lastUpdate = new Date();
+            
+            // Находим лучшие цены (самая низкая цена продажи и самая высокая цена покупки)
+            // Для продажи USDT берем минимальную цену (чтобы предложить лучшую)
+            marketData.bestBuyPrice = Math.min(...simulatedBuyOrders.map(order => order.price));  
+            // Для покупки USDT берем максимальную цену (чтобы предложить лучшую)
+            marketData.bestSellPrice = Math.max(...simulatedSellOrders.map(order => order.price));
+            
+            // Обновляем таблицы
+            updateTables();
+            
+            // Генерируем рекомендации
+            generateRecommendations();
+            
+            // Добавляем заметку о симулированных данных
+            document.getElementById('update-time').textContent = 'Используются симулированные данные (демо-режим)';
+        }
+        
+        // Функция для обновления таблиц с данными
+        function updateTables() {
+            // Обновляем таблицу покупок (предложения на продажу USDT)
+            const buyOrdersTable = document.getElementById('buy-orders').getElementsByTagName('tbody')[0];
+            buyOrdersTable.innerHTML = '';
+            
+            marketData.buyOrders.forEach((order, index) => {
+                const row = buyOrdersTable.insertRow();
+                
+                // Добавляем класс для подсветки лучшей цены
+                if (order.price === marketData.bestBuyPrice) {
+                    row.classList.add('highlight-row');
+                }
+                
+                const priceCell = row.insertCell(0);
+                const availableCell = row.insertCell(1);
+                const methodsCell = row.insertCell(2);
+                
+                priceCell.textContent = formatNumber(order.price);
+                availableCell.textContent = formatNumber(order.available);
+                methodsCell.textContent = order.paymentMethods;
+            });
+            
+            // Обновляем таблицу продаж (предложения на покупку USDT)
+            const sellOrdersTable = document.getElementById('sell-orders').getElementsByTagName('tbody')[0];
+            sellOrdersTable.innerHTML = '';
+            
+            marketData.sellOrders.forEach((order, index) => {
+                const row = sellOrdersTable.insertRow();
+                
+                // Добавляем класс для подсветки лучшей цены
+                if (order.price === marketData.bestSellPrice) {
+                    row.classList.add('highlight-row');
+                }
+                
+                const priceCell = row.insertCell(0);
+                const availableCell = row.insertCell(1);
+                const methodsCell = row.insertCell(2);
+                
+                priceCell.textContent = formatNumber(order.price);
+                availableCell.textContent = formatNumber(order.available);
+                methodsCell.textContent = order.paymentMethods;
+            });
+        }
+        
+        // Функция для применения сценария
+        function applyScenario(event) {
+            const scenario = event.target;
+            const capital = scenario.dataset.capital;
+            const spread = scenario.dataset.spread;
+            const utilization = scenario.dataset.utilization;
+            const turnover = scenario.dataset.turnover;
+            
+            document.getElementById('capital').value = capital;
+            document.getElementById('spread').value = spread;
+            document.getElementById('utilization').value = utilization;
+            document.getElementById('turnover').value = turnover;
+            
+            // Удаляем активный класс со всех сценариев
+            document.querySelectorAll('.scenario').forEach(s => s.classList.remove('active'));
+            
+            // Добавляем активный класс текущему сценарию
+            scenario.classList.add('active');
+            
+            // Запускаем расчет
+            calculateProfit();
+            
+            // Обновляем рекомендации на основе выбранного сценария
+            generateRecommendations();
+        }
+        
+        // Обработчики событий при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Кнопка расчета
+            document.getElementById('calculate').addEventListener('click', calculateProfit);
+            
+            // Кнопка обновления курсов
+            document.getElementById('update-rates').addEventListener('click', fetchOKXData);
+            
+            // Обработчики для сценариев
+            document.querySelectorAll('.scenario').forEach(scenario => {
+                scenario.addEventListener('click', applyScenario);
+            });
+            
+            // Обработчики изменения значений полей
+            const inputFields = ['capital', 'spread', 'rate', 'utilization', 'turnover'];
+            inputFields.forEach(fieldId => {
+                document.getElementById(fieldId).addEventListener('change', function() {
+                    // Удаляем активный класс со всех сценариев
+                    document.querySelectorAll('.scenario').forEach(s => s.classList.remove('active'));
+                    calculateProfit();
+                    generateRecommendations();
+                });
+            });
+            
+            // Обработчик переключателя автообновления
+            document.getElementById('auto-update-toggle').addEventListener('change', function() {
+                if (this.checked) {
+                    startAutoUpdateTimer();
+                } else {
+                    stopAutoUpdateTimer();
+                }
+            });
+            
+            // Обработчик изменения интервала автообновления
+            document.getElementById('update-interval').addEventListener('change', function() {
+                if (document.getElementById('auto-update-toggle').checked) {
+                    startAutoUpdateTimer(); // Перезапускаем с новым интервалом
+                }
+            });
+            
+            // Запускаем начальный расчет
+            calculateProfit();
+            
+            // Загружаем данные с API
+            fetchOKXData();
+        });
+    </script>
+</body>
+</html>
